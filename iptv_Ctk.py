@@ -8,6 +8,7 @@ import tkinter.messagebox as tkmb
 class App(tk.CTk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        tk.set_appearance_mode("dark")
         self.geometry("500x200")
         self.title("Playlist Splitter by © ncniyazov")
         self.progressbar = tk.CTkProgressBar(self, width=500)
