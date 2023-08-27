@@ -26,7 +26,7 @@ def split_channels(playlist_file):
 
     for i in result_list:
         channel = i[0]
-        if "HD" in channel or "4K" in channel or "4k" in channel:
+        if "HD" in channel or "4K" in channel or "4k" in channel or "1080p" in channel:
                 hd_channels.append(i)
         else:
             sd_channels.append(i)
@@ -35,8 +35,6 @@ def split_channels(playlist_file):
 
 
 def write_channels(channels, file_path):
-    """Writes the channels to a file."""
-
     with open(file_path, "w", encoding="utf-8") as f:
         f.write("#EXTM3U\n")
         for channel in channels:
@@ -45,7 +43,7 @@ def write_channels(channels, file_path):
                 f.write (line)
 
 if __name__ == "__main__":
-    playlist_file = "mixed_playlist.m3u8"
+    playlist_file = "playlist (futbol club effekt).m3u8"
     sd_channels, hd_channels = split_channels(playlist_file)
 
     try:
@@ -62,4 +60,4 @@ if __name__ == "__main__":
 
     write_channels(sd_channels, "SD/SD.m3u")
     write_channels(hd_channels, "HD/HD.m3u")
-    print(f"{len(sd_channels)}  SD channels and {len(hd_channels)} created successfully!")
+    print(f"{len(sd_channels)} SD channels and {len(hd_channels)} HD created successfully!")
