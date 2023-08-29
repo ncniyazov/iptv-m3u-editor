@@ -1,0 +1,6 @@
+iptv_tk.py
+setup.py
+iptv_tk.egg-info/PKG-INFO
+iptv_tk.egg-info/SOURCES.txt
+iptv_tk.egg-info/dependency_links.txt
+iptv_tk.egg-info/top_level.txt
