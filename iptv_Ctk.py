@@ -10,7 +10,7 @@ class App(tk.CTk):
         super().__init__(*args, **kwargs)
         tk.set_appearance_mode("dark")
         self.geometry("500x200")
-        self.title("Playlist Splitter by © ncniyazov")
+        self.title("Playlist Splitter by © ncniyazov v. 1.1.0")
         self.progressbar = tk.CTkProgressBar(self, width=500)
         self.progressbar.set(0)
         self.progressbar.pack()
@@ -125,7 +125,7 @@ class App(tk.CTk):
         #     f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported successfully!")
         tkmb.showinfo(
             title="Successfully exported!",
-            message=f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported successfully to {output_dir}.",
+            message=f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported to \n -- {output_dir}/ -- successfully.",
         )
         self.toplevel_window = None
 
