@@ -14,7 +14,7 @@ class App(tk.CTk):
         self.progressbar = tk.CTkProgressBar(self, width=500)
         self.progressbar.set(0)
         self.progressbar.pack()
-       
+
         self.playlist_file_path = tk.StringVar()
         self.chunk_size = tk.IntVar(value=3)
         self.log_text = ""
@@ -23,21 +23,18 @@ class App(tk.CTk):
 
     def create_widgets(self):
         tk.CTkLabel(self, text="Select Playlist File:").pack()
-        tk.CTkButton(self, text="Browse",
-                  command=self.browse_playlist_file).pack()
+        tk.CTkButton(self, text="Browse", command=self.browse_playlist_file).pack()
 
         tk.CTkLabel(self, text="Chunk Size:").pack()
         tk.CTkEntry(self, textvariable=self.chunk_size).pack()
 
-        tk.CTkButton(self, text="Export",
-                  command=self.export_channels).pack()
+        tk.CTkButton(self, text="Export", command=self.export_channels).pack()
 
     def browse_playlist_file(self):
-        file_path = filedialog.askopenfilename(
-            filetypes=[("M3U Files", "*.m3u*")])
+        file_path = filedialog.askopenfilename(filetypes=[("M3U Files", "*.m3u*")])
         if file_path:
             self.playlist_file_path.set(file_path)
-      
+
     def update_progress(self, value):
         self.progress_bar["value"] = value
         self.update_idletasks()
@@ -51,8 +48,9 @@ class App(tk.CTk):
         # chunk
         chunk_size = self.chunk_size.get()
 
-        chunks = [playlist[i:i + chunk_size]
-                  for i in range(1, len(playlist), chunk_size)]
+        chunks = [
+            playlist[i : i + chunk_size] for i in range(1, len(playlist), chunk_size)
+        ]
         result_list = []
 
         for chunk in chunks:
@@ -64,7 +62,12 @@ class App(tk.CTk):
 
         for i in result_list:
             channel = i[0]
-            if "HD" in channel or "4K" in channel or "4k" in channel or "1080p" in channel:
+            if (
+                "HD" in channel
+                or "4K" in channel
+                or "4k" in channel
+                or "1080p" in channel
+            ):
                 hd_channels.append(i)
             else:
                 sd_channels.append(i)
@@ -84,35 +87,48 @@ class App(tk.CTk):
 
         sd_channels, hd_channels = self.split_channels(playlist_file)
 
+        output_dir = filedialog.askdirectory()
+
         try:
-            os.makedirs("SD")
+            if not os.path.exists(os.path.join(output_dir, "SD")):
+                os.makedirs(os.path.join(output_dir, "SD"))
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
 
         try:
-            os.makedirs("HD")
+            if not os.path.exists(os.path.join(output_dir, "HD")):
+                os.makedirs(os.path.join(output_dir, "HD"))
         except OSError as e:
             if e.errno != errno.EEXIST:
                 raise
 
-        #self.log("Exporting SD and HD channels...")
-       
+        # self.log("Exporting SD and HD channels...")
+
         self.update_idletasks()
         self.progressbar.set(50)
         self.progressbar.pack()
-
-        self.write_channels(sd_channels, "SD/SD.m3u")
-        self.write_channels(sd_channels, "SD/SD.m3u8")
-        self.write_channels(hd_channels, "HD/HD.m3u")
-        self.write_channels(hd_channels, "HD/HD.m3u8")
+        sd_m3u_file_path = os.path.join(output_dir, "SD", "SD.m3u")
+        sd_m3u8_file_path = os.path.join(output_dir, "SD", "SD.m3u8")
+        hd_m3u_file_path = os.path.join(output_dir, "HD", "HD.m3u")
+        hd_m3u8_file_path = os.path.join(output_dir, "HD", "HD.m3u8")
+        self.write_channels(sd_channels, sd_m3u_file_path)
+        self.write_channels(sd_channels, sd_m3u8_file_path)
+        self.write_channels(sd_channels, hd_m3u_file_path)
+        self.write_channels(sd_channels, hd_m3u8_file_path)
+        # self.write_channels(sd_channels, "SD/SD.m3u8")
+        # self.write_channels(hd_channels, "HD/HD.m3u")
+        # self.write_channels(hd_channels, "HD/HD.m3u8")
+        print(output_dir)
 
         # self.log(
         #     f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported successfully!")
-        tkmb.showinfo(title="Successfully exported!",
-                      message=f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported successfully!")
+        tkmb.showinfo(
+            title="Successfully exported!",
+            message=f"{len(sd_channels)} SD channels and {len(hd_channels)} HD channels exported successfully to {output_dir}.",
+        )
         self.toplevel_window = None
-        
+
 
 if __name__ == "__main__":
     app = App()
